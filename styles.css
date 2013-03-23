@@ -1,0 +1,108 @@
+/**
+ * Structure of a newslettertemp post
+ * div.newslettertemppost(.read.unread)
+ *     div.header.row
+ *         div.picture.left
+ *         div.topic(.starter)
+ *             div.subject
+ *             div.author
+ *     div.row
+ *         div.side.left
+ *         div.content-mask
+ *             div.content
+ *                 div.attachments
+ *                 div.posting(.shortenedpost|.fullpost)
+ *                     // message
+ *                 div.attachedimages
+ *                     // attachedimages
+ *     div.row
+ *         div.left
+ *         div.options
+ *             div.commands
+ *             div.newslettertemp-post-rating
+ *             div.link
+ *             div.footer
+ */
+
+.newslettertemppost {display: block;position:relative;margin:0 0 1em 0;padding:0;border:1px solid #000;max-width:100%;}
+.newslettertemppost .row {width:100%;position:relative;}
+.newslettertemppost .row .left {float:left;width: 43px;overflow:hidden;}
+.newslettertemppost .row .left .grouppictures a {text-align:center;display:block;margin:6px 2px 0 2px;}
+.newslettertemppost .row .left .grouppicture {width:20px;height:20px;}
+.newslettertemppost .row .topic,
+.newslettertemppost .row .content-mask,
+.newslettertemppost .row .options {margin-left:43px;}
+.newslettertemppost .picture img {margin:4px;}
+.newslettertemppost .options .commands,
+.newslettertemppost .content .attachments,
+.newslettertemppost .options .footer,
+.newslettertemppost .options .link {text-align:right;}
+.newslettertemppost .options .newslettertemp-post-rating {float:left;}
+.newslettertemppost .content .posting {overflow:auto;max-width:100%;}
+.newslettertemppost .content .attachedimages img {max-width:100%;}
+
+.dir-rtl .newslettertemppost .row .topic,
+.dir-rtl .newslettertemppost .row .content-mask,
+.dir-rtl .newslettertemppost .row .options {margin-right:43px;margin-left:0;}
+.dir-rtl .newslettertemppost .row .left {float:right;}
+.dir-rtl.path-mod-newslettertemp .indent {margin-right:30px;margin-left:0;}
+
+.path-mod-newslettertemp .newslettertempolddiscuss,
+#page-mod-newslettertemp-search .c0 {text-align:right;}
+.path-mod-newslettertemp .indent {margin-left: 30px;}
+.path-mod-newslettertemp .newslettertempheaderlist {width: 100%;border-width:1px;border-style:solid;border-collapse:separate;margin-top: 10px;}
+.path-mod-newslettertemp .newslettertempheaderlist td {border-width:1px 0px 0px 1px;border-style:solid;}
+.path-mod-newslettertemp .newslettertempheaderlist th.header.replies .iconsmall { margin: 0 .3em;}
+.path-mod-newslettertemp .newslettertempheaderlist .picture {width: 35px;}
+.path-mod-newslettertemp .newslettertempheaderlist .discussion .starter {vertical-align: middle;}
+.path-mod-newslettertemp .newslettertempheaderlist .discussion .lastpost {white-space: nowrap;text-align: right;}
+.path-mod-newslettertemp .newslettertempheaderlist .replies,
+.path-mod-newslettertemp .newslettertempheaderlist .discussion .author {white-space: nowrap;}
+
+/** Styles for subscribers.php */
+#page-mod-newslettertemp-subscribers .subscriberdiv,
+#page-mod-newslettertemp-subscribers .subscribertable {width:100%;vertical-align:top;}
+#page-mod-newslettertemp-subscribers .subscribertable tr td {vertical-align:top;}
+#page-mod-newslettertemp-subscribers .subscribertable tr td.actions {width:16%;padding-top:3em;}
+#page-mod-newslettertemp-subscribers .subscribertable tr td.actions .actionbutton {margin:0.3em 0;padding:0.5em 0;width:100%;}
+#page-mod-newslettertemp-subscribers .subscribertable tr td.existing,
+#page-mod-newslettertemp-subscribers .subscribertable tr td.potential {width:42%;}
+
+/** Styles for discuss.php **/
+#page-mod-newslettertemp-discuss .discussioncontrols {width:100%;margin:5px;}
+#page-mod-newslettertemp-discuss .discussioncontrols .discussioncontrol {width:33%;float:left;}
+#page-mod-newslettertemp-discuss .discussioncontrol.exporttoportfolio {text-align:left;}
+#page-mod-newslettertemp-discuss .discussioncontrol.displaymode {text-align:center;}
+#page-mod-newslettertemp-discuss .discussioncontrol.movediscussion {float:right;width:auto;text-align:right;padding-right:10px;}
+#page-mod-newslettertemp-discuss .discussioncontrol.movediscussion .movediscussionoption {}
+
+/** Styles for view.php **/
+#page-mod-newslettertemp-view .newslettertempaddnew {margin-bottom: 20px;}
+#page-mod-newslettertemp-view .groupmenu {float: left;text-align:left;white-space: nowrap;}
+#page-mod-newslettertemp-index .subscription,
+#page-mod-newslettertemp-view .subscription {float: right;text-align:right;white-space: nowrap;margin: 5px 0;}
+
+/** Styles for search.php */
+#page-mod-newslettertemp-search .introcontent {padding: 15px;font-weight:bold;}
+
+#page-mod-newslettertemp-index .unread a:first-child,
+#page-mod-newslettertemp-view .unread a:first-child {padding-right: 10px;}
+#page-mod-newslettertemp-index .unread img,
+#page-mod-newslettertemp-view .unread img {margin-left: 5px;}
+#page-mod-newslettertemp-view .unread img {margin-left: 5px;}
+.dir-rtl#page-mod-newslettertemp-view .unread img {margin-right: 5px; margin-left: 0; }
+
+/** Unknown Styles ??? */
+#email .unsubscribelink {margin-top:20px;}
+
+/* Forumpost unread
+-------------------------*/
+#page-mod-newslettertemp-view .unread,
+.newslettertemppost.unread .row.header,
+.path-course-view .unread,
+span.unread {
+    background-color: #FFD;
+}
+.newslettertemppost.unread .row.header {
+    border-bottom: 1px solid #DDD;
+}
