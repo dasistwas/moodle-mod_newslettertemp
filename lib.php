@@ -3032,106 +3032,32 @@ function newslettertemp_get_course_newslettertemp($courseid, $type) {
  * @return string
  */
 function newslettertemp_make_mail_post($course, $cm, $newslettertemp, $discussion, $post, $userfrom, $userto,
-                              $ownpost=false, $reply=false, $link=false, $rate=false, $footer="") {
+                                       $ownpost = false, $reply = false, $link = false, $rate = false, $footer = "") {
 
     global $CFG, $OUTPUT;
 
     $modcontext = context_module::instance($cm->id);
 
-    if (!isset($userto->viewfullnames[$newslettertemp->id])) {
-        $viewfullnames = has_capability('moodle/site:viewfullnames', $modcontext, $userto->id);
-    } else {
-        $viewfullnames = $userto->viewfullnames[$newslettertemp->id];
-    }
-
     // add absolute file links
     $post->message = file_rewrite_pluginfile_urls($post->message, 'pluginfile.php', $modcontext->id, 'mod_newslettertemp', 'post', $post->id);
 
-    // format the post body
-    $options = new stdClass();
-    $options->para = true;
-    
-    require_once $CFG->libdir.'/htmlpurifier/HTMLPurifier.safe-includes.php';
-    require_once $CFG->libdir.'/htmlpurifier/locallib.php';
-
-    $formattedtext = newsletter_purify_html($post->message);
-    //$formattedtext = format_text($post->message, $post->messageformat, $options, $course->id);
-
-    $output = '<table border="0" cellpadding="3" cellspacing="0" class="newslettertemppost">';
-
-    $output .= '<tr class="header"><td width="35" valign="top" class="picture left">';
-    $output .= $OUTPUT->user_picture($userfrom, array('courseid'=>$course->id));
-    $output .= '</td>';
-
-    if ($post->parent) {
-        $output .= '<td class="topic">';
-    } else {
-        $output .= '<td class="topic starter">';
-    }
-    $output .= '<div class="subject">'.format_string($post->subject).'</div>';
-
-    $fullname = fullname($userfrom, $viewfullnames);
-    $by = new stdClass();
-    $by->name = '<a href="'.$CFG->wwwroot.'/user/view.php?id='.$userfrom->id.'&amp;course='.$course->id.'">'.$fullname.'</a>';
-    $by->date = userdate($post->modified, '', $userto->timezone);
-    $output .= '<div class="author">'.get_string('bynameondate', 'newslettertemp', $by).'</div>';
-
-    $output .= '</td></tr>';
-
-    $output .= '<tr><td class="left side" valign="top">';
-
-    if (isset($userfrom->groups)) {
-        $groups = $userfrom->groups[$newslettertemp->id];
-    } else {
-        $groups = groups_get_all_groups($course->id, $userfrom->id, $cm->groupingid);
-    }
-
-    if ($groups) {
-        $output .= print_group_picture($groups, $course->id, false, true, true);
-    } else {
-        $output .= '&nbsp;';
-    }
-
-    $output .= '</td><td class="content">';
+    $header = '';
 
     $attachments = newslettertemp_print_attachments($post, $cm, 'html');
     if ($attachments !== '') {
-        $output .= '<div class="attachments">';
-        $output .= $attachments;
-        $output .= '</div>';
+        $header = $attachments;
     }
 
-    $output .= $formattedtext;
+    $content = newsletter_purify_html($post->message);
 
-// Commands
-    $commands = array();
-
-    if ($post->parent) {
-        $commands[] = '<a target="_blank" href="'.$CFG->wwwroot.'/mod/newslettertemp/discuss.php?d='.
-                      $post->discussion.'&amp;parent='.$post->parent.'">'.get_string('parent', 'newslettertemp').'</a>';
-    }
-
-    if ($reply) {
-        $commands[] = '<a target="_blank" href="'.$CFG->wwwroot.'/mod/newslettertemp/post.php?reply='.$post->id.'">'.
-                      get_string('reply', 'newslettertemp').'</a>';
-    }
-
-    $output .= '<div class="commands">';
-    $output .= implode(' | ', $commands);
-    $output .= '</div>';
-
-// Context link to post if required
-    if ($link) {
-        $output .= '<div class="link">';
-        $output .= '<a target="_blank" href="'.$CFG->wwwroot.'/mod/newslettertemp/discuss.php?d='.$post->discussion.'#p'.$post->id.'">'.
-                     get_string('postincontext', 'newslettertemp').'</a>';
-        $output .= '</div>';
-    }
-
-    if ($footer) {
-        $output .= '<div class="footer">'.$footer.'</div>';
-    }
-    $output .= '</td></tr></table>'."\n\n";
+    $output = 
+        "<table style=\"\">
+          <tbody>
+            <tr style=\"\">$header</tr>
+            <tr style=\"\">$content</tr>
+            <tr style=\"\">$footer</tr>
+          </tbody>
+        </table>";
 
     return $output;
 }
