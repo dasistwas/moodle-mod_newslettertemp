@@ -6207,6 +6207,40 @@ function newslettertemp_user_role_assigned($cp) {
 }
 
 /**
+ * This function is called whenever a user is created 
+ *
+ * @param stdClass $user complete user data as object
+ * @return void
+ */
+function newslettertemp_user_created($user) {
+	global $DB;
+	//check if at least one forum exists on frontpage if not don't go further in order to improve performance
+	if(!$DB->record_exists('newslettertemp', array('course' => 1))){
+		return;
+	}
+
+	$sql = "SELECT f.id, cm.id AS cmid
+              FROM {newslettertemp} f
+              JOIN {course_modules} cm ON (cm.instance = f.id)
+              JOIN {modules} m ON (m.id = cm.module)
+         LEFT JOIN {newslettertemp_subscriptions} fs ON (fs.newslettertemp = f.id AND fs.userid = :userid)
+             WHERE f.course = :courseid
+               AND f.forcesubscribe = :initial
+               AND m.name = 'newslettertemp'
+               AND fs.id IS NULL";
+	$params = array('courseid'=>1, 'userid'=>$user->id, 'initial'=>NEWSLETTERTEMP_INITIALSUBSCRIBE);
+
+	$newslettertemps = $DB->get_records_sql($sql, $params);
+
+	foreach ($newslettertemps as $newslettertemp) {
+		// If user doesn't have allowforcesubscribe capability then don't subscribe.
+		if (has_capability('mod/newslettertemp:allowforcesubscribe', context_module::instance($newslettertemp->cmid), $user->id)) {
+			newslettertemp_subscribe($user->id, $newslettertemp->id);
+		}
+	}
+}
+
+/**
  * This function gets run whenever user is unenrolled from course
  *
  * @param stdClass $cp

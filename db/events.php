@@ -38,4 +38,11 @@ $handlers = array (
         'schedule'         => 'instant',
         'internal'         => 1,
     ),
+    
+    'user_created' => array (
+    		'handlerfile'      => '/mod/newslettertemp/lib.php',
+    		'handlerfunction'  => 'newslettertemp_user_created',
+    		'schedule'         => 'instant',
+    		'internal'         => 1,
+    ),
 );
