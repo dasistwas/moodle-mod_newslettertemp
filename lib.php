@@ -1085,46 +1085,23 @@ function newslettertemp_make_mail_text($course, $cm, $newslettertemp, $discussio
         $canreply = $userto->canpost[$discussion->id];
     }
 
-    $by = New stdClass;
-    $by->name = fullname($userfrom, $viewfullnames);
-    $by->date = userdate($post->modified, "", $userto->timezone);
-
-    $strbynameondate = get_string('bynameondate', 'newslettertemp', $by);
-
     $strnewslettertemps = get_string('newslettertemps', 'newslettertemp');
 
     $canunsubscribe = ! newslettertemp_is_forcesubscribed($newslettertemp);
 
     $posttext = '';
 
-    if (!$bare) {
-        $shortname = format_string($course->shortname, true, array('context' => context_course::instance($course->id)));
-        $posttext  = "$shortname -> $strnewslettertemps -> ".format_string($newslettertemp->name,true);
-
-        if ($discussion->name != $newslettertemp->name) {
-            $posttext  .= " -> ".format_string($discussion->name,true);
-        }
-    }
-
     // add absolute file links
     $post->message = file_rewrite_pluginfile_urls($post->message, 'pluginfile.php', $modcontext->id, 'mod_newslettertemp', 'post', $post->id);
 
-    $posttext .= "\n---------------------------------------------------------------------\n";
     $posttext .= format_string($post->subject,true);
-    if ($bare) {
-        $posttext .= " ($CFG->wwwroot/mod/newslettertemp/discuss.php?d=$discussion->id#p$post->id)";
-    }
-    $posttext .= "\n".$strbynameondate."\n";
-    $posttext .= "---------------------------------------------------------------------\n";
+
+    $posttext .= "\n";
     $posttext .= format_text_email($post->message, $post->messageformat);
     $posttext .= "\n\n";
     $posttext .= newslettertemp_print_attachments($post, $cm, "text");
 
-    if (!$bare && $canreply) {
-        $posttext .= "---------------------------------------------------------------------\n";
-        $posttext .= get_string("postmailinfo", "newslettertemp", $shortname)."\n";
-        $posttext .= "$CFG->wwwroot/mod/newslettertemp/post.php?reply=$post->id\n";
-    }
+
     if (!$bare && $canunsubscribe) {
         $posttext .= "\n---------------------------------------------------------------------\n";
         $posttext .= get_string("unsubscribe", "newslettertemp");
@@ -1171,7 +1148,7 @@ function newslettertemp_make_mail_html($course, $cm, $newslettertemp, $discussio
     }*/
     $posthtml .= '</head>';
     $posthtml .= "\n<body id=\"email\">\n\n";
-
+	/*
     $posthtml .= '<div class="navbar">'.
     '<a target="_blank" href="'.$CFG->wwwroot.'/course/view.php?id='.$course->id.'">'.$shortname.'</a> &raquo; '.
     '<a target="_blank" href="'.$CFG->wwwroot.'/mod/newslettertemp/index.php?id='.$course->id.'">'.$strnewslettertemps.'</a> &raquo; '.
@@ -1182,12 +1159,12 @@ function newslettertemp_make_mail_html($course, $cm, $newslettertemp, $discussio
         $posthtml .= ' &raquo; <a target="_blank" href="'.$CFG->wwwroot.'/mod/newslettertemp/discuss.php?d='.$discussion->id.'">'.
                      format_string($discussion->name,true).'</a></div>';
     }
+    */
     $posthtml .= newslettertemp_make_mail_post($course, $cm, $newslettertemp, $discussion, $post, $userfrom, $userto, false, $canreply, true, false);
 
     if ($canunsubscribe) {
         $posthtml .= '<hr /><div class="mdl-align unsubscribelink">
-                      <a href="'.$CFG->wwwroot.'/mod/newslettertemp/subscribe.php?id='.$newslettertemp->id.'">'.get_string('unsubscribe', 'newslettertemp').'</a>&nbsp;
-                      <a href="'.$CFG->wwwroot.'/mod/newslettertemp/unsubscribeall.php">'.get_string('unsubscribeall', 'newslettertemp').'</a></div>';
+                      <a href="'.$CFG->wwwroot.'/mod/newslettertemp/subscribe.php?id='.$newslettertemp->id.'">'.get_string('unsubscribe', 'newslettertemp').'</a></div>';
     }
 
     $posthtml .= '</body>';
